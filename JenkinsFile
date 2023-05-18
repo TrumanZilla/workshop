@@ -10,6 +10,13 @@ pipeline {
     }
 
     stages {
+        stage('Checkout'){
+            steps{
+                script{
+                    checkout scm
+                }
+            }
+        }
         stage('Hello') {
             environment{
                 MY_THIRD_VAR="third"
@@ -21,24 +28,10 @@ pipeline {
 
         stage('World'){
             agent { docker {image 'maven:latest'} }
-            when{
-                expression{
-                    return day == 4 || day == 5
-                }
-            }
-            steps {
-                build 'second_Pipe'
-            }
+             steps {
+                sh 'java --version'
+             }
         }
-        stage('Weekend'){
-            when{
-                expression{
-                    return day == 6 || day == 7
-                }
-            }
-            steps {
-                build 'second_Pipe'
-            }
-        }
+
     }
 }

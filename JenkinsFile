@@ -20,6 +20,7 @@ pipeline {
         }
 
         stage('World'){
+            agent { docker {image 'maven:latest'} }
             when{
                 expression{
                     return day == 4 || day == 5

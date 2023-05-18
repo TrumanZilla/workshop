@@ -1,0 +1,43 @@
+def date = new Date()
+def day = date[Calendar.DAY_OF_WEEK]
+
+pipeline {
+    agent any
+
+    environment{
+        MY_VAR = "http://myhost"
+        MY_SECOND_VAR = "${MY_VAR}/endpoint"
+    }
+
+    stages {
+        stage('Hello') {
+            environment{
+                MY_THIRD_VAR="third"
+            }
+            steps {
+                sh 'env | grep MY_*'
+            }
+        }
+
+        stage('World'){
+            when{
+                expression{
+                    return day == 4 || day == 5
+                }
+            }
+            steps {
+                build 'second_Pipe'
+            }
+        }
+        stage('Weekend'){
+            when{
+                expression{
+                    return day == 6 || day == 7
+                }
+            }
+            steps {
+                build 'second_Pipe'
+            }
+        }
+    }
+}
